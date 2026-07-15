@@ -1,8 +1,8 @@
 package com.filipi.services;
 
-import com.filipi.entities.ParkSpots;
+import com.filipi.entities.Ticket;
 import com.filipi.exceptions.VehicleNotFoundException;
-import com.filipi.interfaces.IParkSpotRepository;
+import com.filipi.interfaces.ITicketRepository;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -10,20 +10,20 @@ import java.time.LocalDateTime;
 
 public class CalcPayment {
     private final int PRICE_PER_HOUR = 200; // price in centavos
-    private final IParkSpotRepository repository;
+    private final ITicketRepository repository;
 
-    public CalcPayment(IParkSpotRepository repository) {
+    public CalcPayment(ITicketRepository repository) {
         this.repository = repository;
     }
 
     public long execute(String vehiclePlate) throws VehicleNotFoundException, IOException {
-        ParkSpots parkSpot = this.repository.findByVehiclePlate(vehiclePlate);
-        if (parkSpot == null) {
+        Ticket ticket = this.repository.findByVehiclePlate(vehiclePlate);
+        if (ticket == null) {
             throw new VehicleNotFoundException();
         }
 
-        LocalDateTime start = parkSpot.getStartAt();
-        LocalDateTime end = parkSpot.getEndAt();
+        LocalDateTime start = ticket.getStartAt();
+        LocalDateTime end = ticket.getEndAt();
         Duration duration = Duration.between(start, end);
         long durationMinutes = duration.toMinutes();
 

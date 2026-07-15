@@ -1,8 +1,9 @@
 package com.filipi.park_app;
 
 import com.filipi.entities.ParkSpots;
+import com.filipi.entities.Ticket;
 import com.filipi.enums.VehicleType;
-import com.filipi.interfaces.IParkSpotRepository;
+import com.filipi.interfaces.ITicketRepository;
 import com.filipi.services.CalcPayment;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class CalcPaymentTest {
     @Mock
-    private IParkSpotRepository repository;
+    private ITicketRepository repository;
 
     @Test
     public void should_calc_parking_price_less_than_hour() throws IOException {
@@ -26,7 +27,7 @@ public class CalcPaymentTest {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusMinutes(30);
 
-        ParkSpots parkSpots = new ParkSpots(vehiclePlate, VehicleType.CAR, "Tracker", start, end);
+        Ticket ticket = new Ticket(vehiclePlate, VehicleType.CAR, "Tracker", start, end);
 
         when(this.repository.findByVehiclePlate(vehiclePlate)).thenReturn(parkSpots);
 
@@ -44,8 +45,8 @@ public class CalcPaymentTest {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusMinutes(90);
 
-        ParkSpots parkSpots = new ParkSpots(vehiclePlate, VehicleType.CAR, "Tracker", start, end);
-        when(this.repository.findByVehiclePlate(vehiclePlate)).thenReturn(parkSpots);
+        Ticket ticket = new Ticket(vehiclePlate, VehicleType.CAR, "Tracker", start, end);
+        when(this.repository.findByVehiclePlate(vehiclePlate)).thenReturn(ticket);
 
         CalcPayment sut = new CalcPayment(this.repository);
 

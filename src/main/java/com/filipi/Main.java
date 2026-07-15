@@ -5,9 +5,9 @@ import com.filipi.dtos.CheckoutResponse;
 import com.filipi.dtos.HTTPResponse;
 import com.filipi.enums.VehicleType;
 import com.filipi.exceptions.VehicleNotFoundException;
-import com.filipi.exceptions.VehicleParkedException;
-import com.filipi.interfaces.IParkSpotRepository;
-import com.filipi.repository.ParkSpotRepository;
+import com.filipi.exceptions.TicketStartedException;
+import com.filipi.interfaces.ITicketRepository;
+import com.filipi.repository.TicketRepository;
 import com.filipi.services.CalcPayment;
 import com.filipi.services.Checkin;
 import com.filipi.services.Checkout;
@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        IParkSpotRepository repository = new ParkSpotRepository();
+        ITicketRepository repository = new TicketRepository();
 
         Checkin checkin = new Checkin(repository);
         Checkout checkout = new Checkout(repository);
@@ -43,7 +43,7 @@ public class Main {
                     checkin.execute(body);
                     ctx.json(new HTTPResponse(true, String.format("Entrada do veículo %s com a placa %s foi feito", body.vehicleName(), body.vehiclePlate()), null));
                 } catch (Exception e) {
-                    if (e instanceof VehicleParkedException) {
+                    if (e instanceof TicketStartedException) {
                         throw new BadRequestResponse(e.getMessage());
                     }
                     throw  e;

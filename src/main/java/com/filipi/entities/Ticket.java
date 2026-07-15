@@ -4,7 +4,7 @@ import com.filipi.enums.VehicleType;
 
 import java.time.LocalDateTime;
 
-public class ParkSpots {
+public class Ticket {
     private String id;
     private String vehiclePlate;
     private VehicleType vehicleType;
@@ -12,9 +12,9 @@ public class ParkSpots {
     private LocalDateTime startAt;
     private LocalDateTime endAt;
 
-    public ParkSpots() {} // construtor vazio exigido pelo Jackson
+    public Ticket() {} // construtor vazio exigido pelo Jackson
 
-    public ParkSpots(
+    public Ticket(
             String vehiclePlate,
             VehicleType vehicleType,
             String vehicleName,

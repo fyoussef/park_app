@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.filipi.dtos.CheckinInput;
 import com.filipi.entities.ParkSpots;
-import com.filipi.interfaces.IParkSpotRepository;
+import com.filipi.entities.Ticket;
+import com.filipi.interfaces.ITicketRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-public class ParkSpotRepository implements IParkSpotRepository {
+public class TicketRepository implements ITicketRepository {
     private Path path = Path.of(
             "C:\\Users\\fyoussef\\Desktop\\java\\park_app\\src\\main\\java\\com\\filipi\\repository\\database.json"
     );
@@ -21,7 +22,7 @@ public class ParkSpotRepository implements IParkSpotRepository {
     private ObjectMapper mapper = new ObjectMapper();
 
 
-    private HashMap<String, ParkSpots> loadAll() throws IOException {
+    private HashMap<String, Ticket> loadAll() throws IOException {
         this.mapper.registerModule(new JavaTimeModule());
 
         if (this.database.length() == 0) {
@@ -30,15 +31,15 @@ public class ParkSpotRepository implements IParkSpotRepository {
 
         return this.mapper.readValue(
                 this.database,
-                new TypeReference<HashMap<String, ParkSpots>>() {}
+                new TypeReference<HashMap<String, Ticket>>() {}
         );
     }
 
     public void save(CheckinInput input) throws IOException {
         this.mapper.registerModule(new JavaTimeModule());
 
-        HashMap<String, ParkSpots> parkSpots = this.loadAll();
-        ParkSpots parkSpot = new ParkSpots(input.vehiclePlate(), input.vehicleType(), input.vehicleName(), input.startAt(), null);
+        HashMap<String, Ticket> parkSpots = this.loadAll();
+        Ticket parkSpot = new Ticket(input.vehiclePlate(), input.vehicleType(), input.vehicleName(), input.startAt(), null);
         parkSpots.put(parkSpot.getId(), parkSpot);
 
         String data = this.mapper.writeValueAsString(parkSpots);
@@ -48,18 +49,18 @@ public class ParkSpotRepository implements IParkSpotRepository {
         );
     }
 
-    public ParkSpots findByVehiclePlate(String vehiclePlate) throws IOException {
+    public Ticket findByVehiclePlate(String vehiclePlate) throws IOException {
         this.mapper.registerModule(new JavaTimeModule());
 
-        HashMap<String, ParkSpots> parkSpots = this.loadAll();
-        System.out.println(parkSpots instanceof HashMap<String, ParkSpots>);
+        HashMap<String, Ticket> parkSpots = this.loadAll();
+        System.out.println(parkSpots instanceof HashMap<String, Ticket>);
         return parkSpots.get(vehiclePlate);
     }
 
-    public void update(ParkSpots parkSpot) throws IOException {
+    public void update(Ticket parkSpot) throws IOException {
         this.mapper.registerModule(new JavaTimeModule());
 
-        HashMap<String, ParkSpots> parkSpots = this.loadAll();
+        HashMap<String, Ticket> parkSpots = this.loadAll();
         parkSpots.replace(parkSpot.getId(), parkSpot);
 
         String data = this.mapper.writeValueAsString(parkSpots);
